@@ -84,7 +84,7 @@ function addIncome(income){
     }
     income.setID(index);
     //console.log('adding '+index);
-    finances.totalIncome += income.val;
+    finances.totalIncome += parseInt(income.val);
     finances.setAvailableBudget();
 
 }
@@ -103,7 +103,7 @@ function addExpense(expense){
         }
     }
     expense.setID(index);
-    finances.totalExpenses += expense.val;
+    finances.totalExpenses += parseInt(expense.val);
     finances.setAvailableBudget();
 
 }
@@ -165,6 +165,8 @@ addItemButton.addEventListener('click', function(){
         addExpenseToUI(entry);
     }
     
+    updateSummaryUI();
+    
 });
 
 
@@ -200,6 +202,7 @@ function onDeleteClickedIncomeElement(id){
     //console.log('removing '+income.id);
     removeIncome(income);
     removeIncomeFromUI(income);
+    updateSummaryUI();
 }
 
 function onDeleteClickedExpenseElement(id){
@@ -213,6 +216,7 @@ function onDeleteClickedExpenseElement(id){
     }
     removeExpense(expense);
     removeExpenseFromUI(expense);
+    updateSummaryUI();
 }
 
 function removeIncomeFromUI(income){
@@ -238,6 +242,15 @@ function removeExpenseFromUI(expense){
             break;
         }
     }
+}
+
+function updateSummaryUI(){
+    
+    console.log(finances.totalIncome);
+    document.querySelector('.budget__income--value').innerHTML = finances.totalIncome;
+    document.querySelector('.budget__expenses--value').innerHTML = finances.totalExpenses;
+    document.querySelector('.budget__value').innerHTML = finances.availableBudget;
+
 }
 
 

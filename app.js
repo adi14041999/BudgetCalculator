@@ -144,10 +144,11 @@ addItemButton.addEventListener('click', function(){
     
 });
 
+
 function addIncomeToUI(income){
     
-    html = '<div class="item clearfix" id="inc-%id%"> <div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
-    newHtml = html.replace('%id%', income.id);
+    html = '<div class="item clearfix" id="inc-%id%"> <div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn" onclick="onDeleteClickedIncomeElement(%id%)"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+    newHtml = html.replaceAll('%id%', income.id);
     newHtml = newHtml.replace('%description%', income.description);
     newHtml = newHtml.replace('%value%', income.val);
     document.querySelector('.income__list').insertAdjacentHTML('beforeend', newHtml);
@@ -156,16 +157,50 @@ function addIncomeToUI(income){
 
 function addExpenseToUI(expense){
     
-    html = '<div class="item clearfix" id="exp-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
-    newHtml = html.replace('%id%', expense.id);
+    html = '<div class="item clearfix" id="exp-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn" onclick="onDeleteClickedExpenseElement(%id%)"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+    newHtml = html.replaceAll('%id%', expense.id);
     newHtml = newHtml.replace('%description%', expense.description);
     newHtml = newHtml.replace('%value%', expense.val);
     document.querySelector('.expenses__list').insertAdjacentHTML('beforeend', newHtml);
     
 }
 
+function onDeleteClickedIncomeElement(id){
+    
+    var income = incomeList[id];
+    removeIncome(income);
+    removeIncomeFromUI(income);
+}
+
+function onDeleteClickedExpenseElement(id){
+    
+    var expense = expenseList[id];
+    removeExpense(expense);
+    removeExpenseFromUI(expense);
+}
+
+function removeIncomeFromUI(income){
+    
+    var parentDOM = document.querySelector('.income__list').getElementsByClassName('item clearfix');
+    for(var i = 0; i < parentDOM.length; i++){
+        var stringID = parentDOM[i].getAttribute('id');
+        console.log(stringID);
+        if(stringID.localeCompare('inc-'+income.id.toString()) === 0){
+            document.querySelector('.income__list').removeChild(parentDOM[i]);
+            break;
+        }
+    }
+
+}
+
+function removeExpenseFromUI(expense){
+    //same implementation as removeIncomeFromUI
+}
 
 
-
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.split(search).join(replacement);
+};
 
 

@@ -71,7 +71,19 @@ function setTotalExpenses(){
 
 function addIncome(income){
     incomeList.push(income);
-    income.setID(incomeList.length - 1);
+    var index = 0;
+    for(var i=0; i < incomeList.length-1; i++){
+        if(i > index)
+            break;
+        for(var j = 0; j < incomeList.length-1; j++){
+            if( incomeList[j].id === i){
+                index++;
+                break;
+            }
+        }
+    }
+    income.setID(index);
+    //console.log('adding '+index);
     finances.totalIncome += income.val;
     finances.setAvailableBudget();
 
@@ -79,7 +91,18 @@ function addIncome(income){
 
 function addExpense(expense){
     expenseList.push(expense);
-    expense.setID(expenseList.length - 1);
+    var index = 0;
+    for(var i=0; i < expenseList.length; i++){
+        if(i > index)
+            break;
+        for(var j = 0; j < expenseList.length; j++){
+            if( expenseList[j].id === i){
+                index++;
+                break;
+            }
+        }
+    }
+    expense.setID(index);
     finances.totalExpenses += expense.val;
     finances.setAvailableBudget();
 
@@ -91,7 +114,7 @@ function removeIncome(income){
         if(income.isEqualTo(incomeList[i]))
             break;
     }
-    if (i !== 0 && i < incomeList.length) {
+    if (i < incomeList.length) {
         incomeList.splice(i, 1);
     }
     finances.totalIncome -= income.val;
@@ -104,7 +127,7 @@ function removeExpense(expense){
         if(expense.isEqualTo(expenseList[i]))
             break;
     }
-    if (i !== 0 && i < expenseList.length) {
+    if (i < expenseList.length) {
         expenseList.splice(i, 1);
     }
     finances.totalExpenses -= expense.val;
@@ -167,14 +190,27 @@ function addExpenseToUI(expense){
 
 function onDeleteClickedIncomeElement(id){
     
-    var income = incomeList[id];
+    var income;
+    for(var i = 0; i < incomeList.length; i++){
+        if(incomeList[i].id === id){
+            income = incomeList[i];
+            break;
+        }
+    }
+    //console.log('removing '+income.id);
     removeIncome(income);
     removeIncomeFromUI(income);
 }
 
 function onDeleteClickedExpenseElement(id){
     
-    var expense = expenseList[id];
+    var expense;
+    for(var i = 0; i < expenseList.length; i++){
+        if(expenseList[i].id === id){
+            expense = expenseList[i];
+            break;
+        }
+    }
     removeExpense(expense);
     removeExpenseFromUI(expense);
 }
@@ -184,7 +220,6 @@ function removeIncomeFromUI(income){
     var parentDOM = document.querySelector('.income__list').getElementsByClassName('item clearfix');
     for(var i = 0; i < parentDOM.length; i++){
         var stringID = parentDOM[i].getAttribute('id');
-        console.log(stringID);
         if(stringID.localeCompare('inc-'+income.id.toString()) === 0){
             document.querySelector('.income__list').removeChild(parentDOM[i]);
             break;
@@ -194,7 +229,15 @@ function removeIncomeFromUI(income){
 }
 
 function removeExpenseFromUI(expense){
-    //same implementation as removeIncomeFromUI
+    
+    var parentDOM = document.querySelector('.expenses__list').getElementsByClassName('item clearfix');
+    for(var i = 0; i < parentDOM.length; i++){
+        var stringID = parentDOM[i].getAttribute('id');
+        if(stringID.localeCompare('exp-'+expense.id.toString()) === 0){
+            document.querySelector('.expense__list').removeChild(parentDOM[i]);
+            break;
+        }
+    }
 }
 
 
